@@ -329,6 +329,33 @@ uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t
   return u8g_Begin(u8g);
 }
 
+uint8_t u8g_Init8Bit3ChipSelect(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, uint8_t en, uint8_t cs1, uint8_t cs2,uint8_t cs3, uint8_t di, uint8_t rw, uint8_t reset)
+{ 
+  /* fill data structure with some suitable values */
+  u8g_init_data(u8g);
+  u8g->dev = dev;
+    
+  /* assign user pins */
+  u8g->pin_list[U8G_PI_D0] = d0;
+  u8g->pin_list[U8G_PI_D1] = d1;
+  u8g->pin_list[U8G_PI_D2] = d2;
+  u8g->pin_list[U8G_PI_D3] = d3;
+  u8g->pin_list[U8G_PI_D4] = d4;
+  u8g->pin_list[U8G_PI_D5] = d5;
+  u8g->pin_list[U8G_PI_D6] = d6;
+  u8g->pin_list[U8G_PI_D7] = d7;
+
+  u8g->pin_list[U8G_PI_EN] = en;
+  u8g->pin_list[U8G_PI_CS1] = cs1;
+  u8g->pin_list[U8G_PI_CS2] = cs2;
+  u8g->pin_list[U8G_PI_CS3] = cs3;
+  
+  u8g->pin_list[U8G_PI_DI] = di;
+  u8g->pin_list[U8G_PI_RW] = rw;
+  u8g->pin_list[U8G_PI_RESET] = reset;
+    
+  return u8g_Begin(u8g);
+}
 /*
 
   PIN_D0 8

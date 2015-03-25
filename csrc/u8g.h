@@ -386,6 +386,9 @@ extern u8g_dev_t u8g_dev_uc1610_dogxl160_2x_gr_hw_spi;
 extern u8g_dev_t u8g_dev_ks0108_128x64;         /* official Arduino Library interface */
 extern u8g_dev_t u8g_dev_ks0108_128x64_fast;    /* faster, but uses private tables from the Arduino Library */
 
+/* Display: Generic KS0108b, Size: 192x64 monochrom */
+extern u8g_dev_t u8g_dev_ks0108_192x64_fast;    /* 192x64 */
+
 /* Nokia 84x48 Display with PCD8544 */
 extern u8g_dev_t u8g_dev_pcd8544_84x48_sw_spi;
 extern u8g_dev_t u8g_dev_pcd8544_84x48_hw_spi;
@@ -668,6 +671,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 uint8_t u8g_com_arduino_uc_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 uint8_t u8g_com_arduino_t6963_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);			/* u8g_com_arduino_t6963.c */
 
+uint8_t u8g_com_arduino_fast_parallel_3chipsel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_arduino_fast_parallel.c */
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */
 uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_sw_spi.c */
@@ -795,6 +799,7 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_fast_parallel_fn
 #define U8G_COM_T6963  u8g_com_arduino_t6963_fn
+#define U8G_COM_FAST_PARALLEL_3CHIPSEL u8g_com_arduino_fast_parallel_3chipsel_fn
 #else /* Arduino Due, Chipkit PIC32 */
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_parallel_fn
@@ -1047,6 +1052,8 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_CS 2
 #define U8G_PI_CS1 2
 #define U8G_PI_CS2 3
+#define U8G_PI_CS3 14
+
 /* Feb 2013: A0 state moved from 7 to 3 for t6963 controller*/
 #define U8G_PI_A0_STATE 3
 
@@ -1074,11 +1081,10 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_D7 12
 
 /* read/write pin, must be the last pin in the list, this means U8G_PIN_LIST_LEN =  U8G_PI_RW + 1*/
-#define U8G_PI_WR 13
-#define U8G_PI_RW 13 
+#define U8G_PI_WR 15
+#define U8G_PI_RW 15
 
-#define U8G_PIN_LIST_LEN 14
-
+#define U8G_PIN_LIST_LEN 16
 
 #define U8G_PIN_DUMMY 254
 #define U8G_PIN_NONE 255
@@ -1156,6 +1162,9 @@ uint8_t u8g_InitI2C(u8g_t *u8g, u8g_dev_t *dev, uint8_t options);	/* use U8G_I2C
 uint8_t u8g_Init8BitFixedPort(u8g_t *u8g, u8g_dev_t *dev, uint8_t en, uint8_t cs, uint8_t di, uint8_t rw, uint8_t reset);
 uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
   uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset);
+
+uint8_t u8g_Init8Bit3ChipSelect(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t cs3, uint8_t di, uint8_t rw, uint8_t reset);
+
 uint8_t u8g_InitRW8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
   uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
